@@ -6,22 +6,26 @@ import { UserService } from './users/user.service';
 import { UserRepository } from './users/user.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entities/user.entity';
-import { BasicStrategy } from './security/basic.strategy';
 import { FilesService } from './files/files.service';
-import * as process from 'process';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from './security/jwt.strategy';
 
 @Module({
   imports: [
-    //TODO: ForRootAsync
+    JwtModule.register({
+      global: true,
+      secret: process.env.JWT_SECRET || 'super_secret',
+      signOptions: { expiresIn: '600s' },
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.POSTGRES_HOST,
-      port: Number(process.env.POSTGRES_PORT),
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DB,
+      host: process.env.POSTGRES_HOST || 'localhost',
+      port: Number(process.env.POSTGRES_PORT) || 5432,
+      username: process.env.POSTGRES_USER || 'postgres',
+      password: process.env.POSTGRES_PASSWORD || 'a@R~w2B0Lf9V',
+      database: process.env.POSTGRES_DB || 'test_iv',
       entities: [User],
-      synchronize: true,
+      synchronize: false,
     }),
     TypeOrmModule.forFeature([User]),
   ],
@@ -30,8 +34,7 @@ import * as process from 'process';
     AppService,
     UserService,
     UserRepository,
-    //TODO: Bearer strategy
-    BasicStrategy,
+    JwtStrategy,
     FilesService,
   ],
 })

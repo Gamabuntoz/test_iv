@@ -2,19 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './user.repository';
-import { jsPDF } from 'jspdf';
 import { User } from './entities/user.entity';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { FilesService } from '../files/files.service';
 import { GeneratePdfDto } from './dto/generate-pdf.dto';
-import * as path from 'path';
-import * as fs from 'fs';
+import { LoginUserDto } from './dto/login-user.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
   constructor(
     protected userRepository: UserRepository,
     protected filesService: FilesService,
+    protected jwtService: JwtService,
   ) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<boolean> {
@@ -28,6 +28,7 @@ export class UserService {
   }
 
   async findAllUsers() {
+    console.log(process.env);
     return this.userRepository.findAll();
   }
 
@@ -67,5 +68,17 @@ export class UserService {
     const pdf = await this.filesService.generatePDF(user);
     await this.userRepository.insertPdf(user.id, pdf);
     return true;
+  }
+
+  async loginUser(loginUserDto: LoginUserDto) {
+    const user = await this.userRepository.findUserByEmail(loginUserDto.email);
+    if (!user) return false;
+    const accessToken = this.jwtService.sign(
+      { email: user.email },
+      {
+        secret: process.env.JWT_SECRET || 'super_secret',
+      },
+    );
+    return { accessToken: accessToken };
   }
 }

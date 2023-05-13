@@ -18,5 +18,5 @@ export class User {
   image: string | null;
 
   @Column({ type: 'text' })
-  pdf: string | null | ArrayBuffer;
+  pdf: string | null;
 }
