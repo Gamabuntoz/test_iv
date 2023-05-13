@@ -18,10 +18,12 @@ export class UserService {
   ) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<boolean> {
-    const userEntity: CreateUserDto = {
+    const userEntity = {
       email: createUserDto.email,
       firstName: createUserDto.firstName,
       lastName: createUserDto.lastName,
+      image: null,
+      pdf: null,
     };
     await this.userRepository.create(userEntity);
     return true;

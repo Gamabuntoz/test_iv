@@ -25,7 +25,7 @@ import { JwtStrategy } from './security/jwt.strategy';
       password: process.env.POSTGRES_PASSWORD || 'a@R~w2B0Lf9V',
       database: process.env.POSTGRES_DB || 'test_iv',
       entities: [User],
-      synchronize: false,
+      synchronize: true,
     }),
     TypeOrmModule.forFeature([User]),
   ],

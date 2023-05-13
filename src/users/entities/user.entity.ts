@@ -14,9 +14,9 @@ export class User {
   @Column()
   lastName: string;
 
-  @Column()
+  @Column({ nullable: true })
   image: string | null;
 
-  @Column({ type: 'text' })
+  @Column({ nullable: true })
   pdf: string | null;
 }

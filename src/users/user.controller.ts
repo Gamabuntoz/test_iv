@@ -87,7 +87,9 @@ export class UserController {
   @Post(':id/image')
   @UseInterceptors(FileInterceptor('image'))
   async uploadImage(@Param('id') id: string, @UploadedFile() image) {
-    return this.userService.uploadImage(id, image);
+    const result = await this.userService.uploadImage(id, image);
+    if (!result) throw new NotFoundException();
+    return result;
   }
 
   @HttpCode(HttpStatus.OK)
