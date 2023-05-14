@@ -7,7 +7,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 @Injectable()
 export class UserRepository {
   constructor(
-    @InjectRepository(User) private readonly userModel: Repository<User>, // @InjectDataSource() protected dataSource: DataSource
+    @InjectRepository(User) private readonly userModel: Repository<User>,
   ) {}
 
   async create(createUserDto) {

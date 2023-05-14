@@ -5,6 +5,14 @@ services:
     image: postgres:alpine
     env_file:
       - .env
+      # My .env file content:
+      # PORT=5000
+      # POSTGRES_HOST=postgres
+      # POSTGRES_USER=postgres
+      # POSTGRES_DB=test_iv
+      # POSTGRES_PASSWORD=a@R~w2B0Lf9V
+      # POSTGRES_PORT=5432
+      # JWT_SECRET=super_secret
     ports:
       - 5432:5432
     restart: always
